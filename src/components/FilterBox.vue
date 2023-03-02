@@ -1,12 +1,16 @@
 <template>
-    <div :class="필터" class='filter-item' :style="`background-image:url(${이미지})`">
+    <div @click="fire" :class="필터" class='filter-item' :style="`background-image:url(${이미지})`">
     </div> 
 </template>
 
 <script>
 export default {
     name: 'filterbox',
-
+    methods : {
+      fire(){
+        this.emitter.emit('박스클릭함',this.필터)
+      }
+    },
     data(){
     },
     props: {

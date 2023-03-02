@@ -4,9 +4,9 @@
       <div class="profile"></div>
       <span class="profile-name">{{boardPan.name}}</span>
     </div>
-    <div class="post-body" :style="{ backgroundImage : `url(${boardPan.postImage})`}"></div>
+    <div @click="$store.commit('좋아요')" class="post-body" :style="{ backgroundImage : `url(${boardPan.postImage})`}"></div>
     <div class="post-content">
-      <p>{{boardPan.likes}}</p>
+      <p>{{$store.state.likes}}likes</p>
       <p><strong>{{boardPan.name}}</strong>{{boardPan.content}}</p>
       <p class="date">May 15</p>
     </div>

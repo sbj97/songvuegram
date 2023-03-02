@@ -10,6 +10,16 @@
     <img src="./assets/logo.png" class="logo" />
   </div>
 
+  <h4>안녕 {{$store.state.age}}</h4>
+  <!--수정 부탁하려면 $store.commit() mutations 부탁-->  
+  <button @click="증가(10)">버튼</button>
+  <!--actions 부탁-->
+  <p>{{$store.state.more}}</p>
+  <button @click="$store.dispatch('getData')">더보기버튼</button>
+  <p>{{내이름}} {{age}} {{likes}}</p>
+  <button @click="카운터++">버튼</button>
+
+
   <container-box 
     :boardPan="boardPan" 
     :step="step"
@@ -17,43 +27,63 @@
     @write="작성한글 = $event"
   ></container-box> 
 
-  <button @click="more">+더보기</button>
-    
-
   <div class="footer">
     <ul class="footer-button-plus">
       <input @change="upload" type="file" id="file" class="inputfile" />
       <label for="file" class="input-plus">+</label>
     </ul>
   </div>
-  
+  <h4>{{ $store.state.name }}</h4> <!--store.js에 있는 name 가져오는법 -->
+  <button @click="$store.state.name = 박"></button>
 </template>
 
 <script>
 import ContainerBox from './components/ContainerBox.vue';
 import postdata from './assets/postdata.js'
 import axios from 'axios'
-export default {
-  
-  components: {
-    ContainerBox,
-  },
+import { mapMutations, mapState } from 'vuex';
 
-  data(){
+export default {
+
+    name: "App",
+    data(){
     return{
       boardPan: postdata,
       더보기: 0,
       step : 0,
       이미지 : "",
       작성한글: "",
+      선택판필터: "",
+      카운터 : 0,
     }
+  },
+  mounted(){
+    this.emiiter.on('박스클릭함',(a)=>{
+      console.log(a)
+    });
+  },
+
+  components: {
+    ContainerBox,
   },
 
   created() {
     console.log(this.boardPan)
   },
+
+  computed :{
+    name(){
+      return this.$store.state.name
+    },
+    ...mapState(['name' , 'age' ,'likes']),
+    ...mapState({ 내이름 : 'name'}),
+  },
   
   methods :{
+    ...mapMutations(['setMore','좋아요','증가']),
+    now(){
+      return new Date()
+    },
     publish(){
 
       var myBoardPan = {
@@ -64,7 +94,7 @@ export default {
         date: "May 15",
         liked: false,
         content: this.작성한글,
-        filter: "perpetua"
+        filter: this.선택한필터,
       };
 
       // 왼쪽으로 밀어넣음.unshift
